@@ -4,6 +4,7 @@ from nltk.translate.bleu_score import corpus_bleu, sentence_bleu
 from nltk.tokenize import word_tokenize
 from rouge import Rouge
 from sentence_transformers import SentenceTransformer, util
+import os
 
 def generate_square_subsequent_mask(sz, device):
     mask = torch.triu(torch.ones((sz, sz), device=device)).t()
@@ -43,3 +44,10 @@ def calculate_semantic_similarity(texts1, texts2, model_name='all-MiniLM-L6-v2')
 
     similarity_scores = [cosine_similarities[i][i].item() for i in range(len(texts1))]
     return sum(similarity_scores) / len(similarity_scores) if len(similarity_scores) > 0 else 0
+
+def save_model(model, path):
+    #Check if folder exists, create if not
+    folder = os.path.dirname(path)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    torch.save(model.state_dict(), path)

@@ -32,7 +32,7 @@ code_iterator, pseudo_iterator = create_data_iterators()
 tokenizer_code.train_from_iterator(code_iterator, trainer=trainer)
 tokenizer_pseudo.train_from_iterator(pseudo_iterator, trainer=trainer)
 
-# Vocabulary setup for the tokenizers
+# Vocabulary setup for the tokenizers-own
 vocab_dict_code = tokenizer_code.get_vocab()
 sorted_vocab_code = sorted(vocab_dict_code.items(), key=lambda x: x[1])
 ordered_vocab_code = OrderedDict(sorted_vocab_code)
@@ -99,18 +99,18 @@ def train_tokenizers():
     tokenizer_pseudo.train_from_iterator(pseudo_iterator, trainer=trainer)
     return tokenizer_code, tokenizer_pseudo
 
-def save_tokenizers(tokenizer_code, tokenizer_pseudo, directory='tokenizers'):
+def save_tokenizers(tokenizer_code, tokenizer_pseudo, directory='tokenizers-own-own'):
     if not os.path.exists(directory):
         os.makedirs(directory)
     tokenizer_code.save(os.path.join(directory, 'tokenizer_code.json'))
     tokenizer_pseudo.save(os.path.join(directory, 'tokenizer_pseudo.json'))
 
-def load_tokenizers(directory='tokenizers'):
+def load_tokenizers(directory='tokenizers-own'):
     tokenizer_code = Tokenizer.from_file(os.path.join(directory, 'tokenizer_code.json'))
     tokenizer_pseudo = Tokenizer.from_file(os.path.join(directory, 'tokenizer_pseudo.json'))
     return tokenizer_code, tokenizer_pseudo
 
 if __name__ == "__main__":
-    # Train and save tokenizers
+    # Train and save tokenizers-own
     code_tok, pseudo_tok = train_tokenizers()
     save_tokenizers(code_tok, pseudo_tok)
