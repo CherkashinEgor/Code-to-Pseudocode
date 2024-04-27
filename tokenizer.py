@@ -110,6 +110,14 @@ def load_tokenizers(directory='tokenizers-own'):
     tokenizer_pseudo = Tokenizer.from_file(os.path.join(directory, 'tokenizer_pseudo.json'))
     return tokenizer_code, tokenizer_pseudo
 
+def train_or_load_tokenizers(directory='tokenizers-own'):
+    if os.path.exists(directory):
+        return load_tokenizers(directory)
+    else:
+        code_tok, pseudo_tok = train_tokenizers()
+        save_tokenizers(code_tok, pseudo_tok)
+        return code_tok, pseudo_tok
+
 if __name__ == "__main__":
     # Train and save tokenizers-own
     code_tok, pseudo_tok = train_tokenizers()

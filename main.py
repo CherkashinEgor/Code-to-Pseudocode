@@ -2,7 +2,7 @@ import torch
 from train import train_model
 from model import Seq2SeqTransformer, load_model
 from data import create_dataloaders
-from tokenizer import train_tokenizers, load_tokenizers
+from tokenizer import train_or_load_tokenizers
 from translate import translate, translate_with_sampling
 from util import save_model
 
@@ -10,7 +10,9 @@ def main():
     # Device configuration
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    tokenizer_code, tokenizer_pseudo = load_tokenizers()
+
+    # Train or load tokenizers
+    tokenizer_code, tokenizer_pseudo = train_or_load_tokenizers()
 
     # Load data
     train_dataloader, val_dataloader = create_dataloaders(batch_size=128)
