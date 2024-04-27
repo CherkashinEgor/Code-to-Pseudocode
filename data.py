@@ -19,11 +19,11 @@ class DjangoDataset(Dataset):
 def load_datasets():
     # Load datasets from Hugging Face's datasets
     django_train = load_dataset("AhmedSSoliman/DJANGO", split="train")
-    django_test = load_dataset("AhmedSSoliman/DJANGO", split="encoder-decoder")
+    django_test = load_dataset("AhmedSSoliman/DJANGO", split="test")
     django_all = load_dataset("AhmedSSoliman/DJANGO", split="all")
 
     conala_train = load_dataset("neulab/conala", split="train")
-    conala_test = load_dataset("neulab/conala", split="encoder-decoder")
+    conala_test = load_dataset("neulab/conala", split="test")
     conala_all = load_dataset("neulab/conala", split="all")
 
     # Ensure datasets are formatted as PyTorch tensors

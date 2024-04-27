@@ -4,7 +4,7 @@ from model import Seq2SeqTransformer, load_model
 from data import create_dataloaders
 from tokenizer import train_tokenizers, load_tokenizers
 from translate import translate, translate_with_sampling
-from utils import save_model
+from util import save_model
 
 def main():
     # Device configuration
