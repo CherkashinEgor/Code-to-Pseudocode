@@ -90,12 +90,13 @@ def create_dataloaders(batch_size: int):
 
     train_dataset = DjangoDataset(train_code, train_pseudo)
     val_dataset = DjangoDataset(code_val, pseudo_val)
-    test_dataset = DjangoDataset(code_test, pseudo_test)
+
 
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, collate_fn=collate_fn)
     val_dataloader = DataLoader(val_dataset, batch_size=batch_size, collate_fn=collate_fn)
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, collate_fn=collate_fn)
-    return train_dataloader, val_dataloader, test_dataloader
+
+    return train_dataloader, val_dataloader, code_test
+
 
 
 def collate_fn(batch):

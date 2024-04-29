@@ -18,7 +18,7 @@ def main():
     tokenizer_code, tokenizer_pseudo = train_or_load_tokenizers()
 
     # Load data
-    train_dataloader, val_dataloader, test_dataloader = create_dataloaders(batch_size=128)
+    train_dataloader, val_dataloader, code_test = create_dataloaders(batch_size=128)
 
     # Initialize the model
     SRC_VOCAB_SIZE = len(tokenizer_code.get_vocab())
@@ -54,7 +54,7 @@ def main():
             training_info["training_time"] = end_time - start_time
             save_model(model, f"checkpoints2/model_nhead_{nhead}_num_layer_{num_layer}.pth")
             save_info(training_info, f"saved_info/all_models_training_info.json")
-            generate_test_translations(model, test_dataloader, device, f"nhead_{nhead}_num_layer_{num_layer}", all_generations)
+            generate_test_translations(model, code_test, device, f"nhead_{nhead}_num_layer_{num_layer}", all_generations)
 
     save_info(all_generations, f"saved_info/all_generations.json")
 
