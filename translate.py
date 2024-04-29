@@ -26,8 +26,6 @@ def greedy_decode(model, src, src_mask, max_len, start_symbol, device):
 
 def translate(model: torch.nn.Module, src_sentence: str, device, max_len=50):
     model.eval()
-    print("SRC sentence: ", src_sentence)
-    print(text_transform[SRC_LANGUAGE](src_sentence))
     src = text_transform[SRC_LANGUAGE](src_sentence).view(-1, 1)
     num_tokens = src.shape[0]
     src_mask = (torch.zeros(num_tokens, num_tokens)).type(torch.bool).to(device)
