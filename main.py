@@ -3,8 +3,8 @@ from train import train_model
 from model import Seq2SeqTransformer, load_model
 from data import create_dataloaders
 from tokenizer import train_or_load_tokenizers
-from translate import translate, translate_with_sampling
-from util import save_model, save_info, generate_test_translations
+from translate import translate, translate_with_sampling, generate_test_translations
+from util import save_model, save_info
 import time
 import json
 import os

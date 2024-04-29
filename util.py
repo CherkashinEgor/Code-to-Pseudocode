@@ -3,8 +3,7 @@ import math
 from nltk.translate.bleu_score import corpus_bleu, sentence_bleu
 from nltk.tokenize import word_tokenize
 from rouge import Rouge
-from sentence_transformers import SentenceTransformer, util
-from translate import translate, translate_with_sampling
+from sentence_transformers import SentenceTransformer
 import json
 import os
 
@@ -39,6 +38,7 @@ def calculate_rouge_scores(generated_texts, reference_texts):
     return scores
 
 def calculate_semantic_similarity(texts1, texts2, model_name='all-MiniLM-L6-v2'):
+    from sentence_transformers import util
     model = SentenceTransformer(model_name)
     embeddings1 = model.encode(texts1, convert_to_tensor=True)
     embeddings2 = model.encode(texts2, convert_to_tensor=True)
@@ -63,18 +63,4 @@ def save_info(training_info, path):
     with open(path, 'w') as f:
         json.dump(training_info, f)
     print(f"Info saved to {path}")
-
-def generate_test_translations(model, test_dataloader, device, model_name, all_generations):
-    model.eval()
-    translations = []
-    with torch.no_grad():
-        for src, tgt in test_dataloader:
-            for i in range(len(src)):
-                src_sample = src[i]
-                tgt_sample = tgt[i]
-                translation = translate(model, src_sample, device)
-                translation_with_sampling = translate_with_sampling(model, src_sample, device, temperature=0.5)
-                translations.append(translation)
-                translations.append(translation_with_sampling)
-    all_generations[model_name] = translations
 

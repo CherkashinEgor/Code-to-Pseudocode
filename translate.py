@@ -62,3 +62,17 @@ def translate_with_sampling(model: torch.nn.Module, src_sentence: str, device, t
     src_mask = (torch.zeros(num_tokens, num_tokens)).type(torch.bool).to(device)
     tgt_tokens = temperature_sampling_decode(model, src, src_mask, max_len, BOS_IDX, temperature, device).flatten()
     return " ".join([vocab_transform[TGT_LANGUAGE].lookup_token(token) for token in tgt_tokens if token != EOS_IDX])
+
+def generate_test_translations(model, test_dataloader, device, model_name, all_generations):
+    model.eval()
+    translations = []
+    with torch.no_grad():
+        for src, tgt in test_dataloader:
+            for i in range(len(src)):
+                src_sample = src[i]
+                tgt_sample = tgt[i]
+                translation = translate(model, src_sample, device)
+                translation_with_sampling = translate_with_sampling(model, src_sample, device, temperature=0.5)
+                translations.append(translation)
+                translations.append(translation_with_sampling)
+    all_generations[model_name] = translations
