@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from datasets import load_dataset
 from typing import List, Tuple
+import random
 
 
 class DjangoDataset(Dataset):
@@ -59,12 +60,42 @@ def create_data_iterators():
 
 def create_dataloaders(batch_size: int):
     datasets = load_datasets()
-    train_dataset = DjangoDataset(datasets["django_train"]["code"], datasets["django_train"]["nl"])
-    val_dataset = DjangoDataset(datasets["django_test"]["code"], datasets["django_test"]["nl"])
+
+    conala_train = datasets["conala_train"]
+    train_code = datasets["django_train"]["code"] + [code for code, intent in
+                                                  zip(conala_train["snippet"], conala_train["rewritten_intent"]) if
+                                                  intent is not None]
+    train_pseudo = datasets["django_train"]["nl"] + [pseudo for pseudo in
+                                                  conala_train["rewritten_intent"] if
+                                                  pseudo is not None]
+
+    conala_test = datasets["conala_test"]
+    code_val = datasets["django_test"]["code"] + [code for code, intent in
+                                                  zip(conala_test["snippet"], conala_test["rewritten_intent"]) if
+                                                  intent is not None]
+    pseudo_val = datasets["django_test"]["nl"] + [pseudo for pseudo in
+                                                  datasets["conala_test"]["rewritten_intent"] if
+                                                  pseudo is not None]
+    combined_data = list(zip(code_val, pseudo_val))
+
+    random.shuffle(combined_data)
+
+    sample_size = int(0.1 * len(combined_data))
+
+    validation_data = combined_data[:sample_size]
+    remaining_test_data = combined_data[sample_size:]
+
+    code_test, pseudo_test = zip(*validation_data)
+    code_val, pseudo_val = zip(*remaining_test_data)
+
+    train_dataset = DjangoDataset(train_code, train_pseudo)
+    val_dataset = DjangoDataset(code_val, pseudo_val)
+    test_dataset = DjangoDataset(code_test, pseudo_test)
 
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, collate_fn=collate_fn)
     val_dataloader = DataLoader(val_dataset, batch_size=batch_size, collate_fn=collate_fn)
-    return train_dataloader, val_dataloader
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, collate_fn=collate_fn)
+    return train_dataloader, val_dataloader, test_dataloader
 
 
 def collate_fn(batch):
