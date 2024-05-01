@@ -95,7 +95,7 @@ def create_dataloaders(batch_size: int):
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, collate_fn=collate_fn)
     val_dataloader = DataLoader(val_dataset, batch_size=batch_size, collate_fn=collate_fn)
 
-    return train_dataloader, val_dataloader, code_test
+    return train_dataloader, val_dataloader, code_test, pseudo_test
 
 
 

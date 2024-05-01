@@ -18,7 +18,7 @@ def main():
     tokenizer_code, tokenizer_pseudo = train_or_load_tokenizers()
 
     # Load data
-    train_dataloader, val_dataloader, code_test = create_dataloaders(batch_size=128)
+    train_dataloader, val_dataloader, code_test, pseudo_test = create_dataloaders(batch_size=128)
 
     # Initialize the model
     SRC_VOCAB_SIZE = len(tokenizer_code.get_vocab())

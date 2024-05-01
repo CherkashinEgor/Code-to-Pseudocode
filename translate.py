@@ -66,10 +66,11 @@ def translate_with_sampling(model: torch.nn.Module, src_sentence: str, device, t
 def generate_test_translations(model, code_test, device, model_name, all_generations):
     model.eval()
     translations = []
+    translations_with_sampling = []
     with torch.no_grad():
         for src_sample in code_test:
             translation = translate(model, src_sample, device)
             translation_with_sampling = translate_with_sampling(model, src_sample, device, temperature=0.5)
             translations.append(translation)
-            translations.append(translation_with_sampling)
-    all_generations[model_name] = translations
+            translations_with_sampling.append(translation_with_sampling)
+    all_generations[model_name] = {"greedy": translations, "sampling": translations_with_sampling}
