@@ -45,9 +45,10 @@ def main():
                 dropout=0.1
             ).to(device)
             # Train the model
-            checkpoint = torch.load(LOAD_PATH + f"nhead_{nhead}_num_layer_{num_layer}.pth")
+            checkpoint = torch.load(LOAD_PATH + f"model_nhead_{nhead}_num_layer_{num_layer}.pth")
             model.load_state_dict(checkpoint)
             generate_test_translations(model, code_test, device, f"nhead_{nhead}_num_layer_{num_layer}", all_generations)
+            print("Done with nhead:", nhead, "num_layer:", num_layer)
 
     save_info(all_generations, f"saved_info/all_generations.json")
 
