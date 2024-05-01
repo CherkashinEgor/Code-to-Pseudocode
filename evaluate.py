@@ -50,6 +50,8 @@ def main():
             generate_test_translations(model, code_test, device, f"nhead_{nhead}_num_layer_{num_layer}", all_generations)
             print("Done with nhead:", nhead, "num_layer:", num_layer)
 
+    all_generations["pseudo_test"] = pseudo_test
+
     save_info(all_generations, f"saved_info/all_generations.json")
 
     # model = Seq2SeqTransformer(
